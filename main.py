@@ -1,4 +1,3 @@
-# 5872856683:AAE-gcdryoBHk0fONGyycZtC7jI-FrgjiGk
 import telebot
 from peewee import *        # импортируем все классы и объекты из peewee
 from telebot import types   # используется здесь для создания кнопок
@@ -24,7 +23,7 @@ db.create_tables([Post])
 
 
 # получаем доступ к боту
-bot = telebot.TeleBot('5872856683:AAE-gcdryoBHk0fONGyycZtC7jI-FrgjiGk')
+bot = telebot.TeleBot('TGbot_token_here')
 
 
 # Начало работы бота после отправки /start
@@ -53,11 +52,11 @@ def process_add_step(message):
         try:
             # Новая запись в БД
             Post.create(post_id=int(data[0]), username=data[1], text=data[2], likes=data[3])
-            bot.send_message(chat_id, "Данные успешно добавлены.")
+            bot.send_message(chat_id, "Данные успешно добавлены")
         except Exception as e:
-            bot.send_message(chat_id, f"Ошибка при добавлении данных: {e}")
+            bot.send_message(chat_id, f"Ошибка при добавлении поста: {e}")
     else:
-        bot.send_message(chat_id, "Неверный формат данных.")
+        bot.send_message(chat_id, "Неверный формат данных")
 
 
 @bot.message_handler(func=lambda message: message.text == 'Лента')
@@ -70,13 +69,13 @@ def handle_list(message):
     if data:
         bot.send_message(chat_id, data)
     else:
-        bot.send_message(chat_id, "Нет данных в базе.")
+        bot.send_message(chat_id, "Постов нет")
 
 
 @bot.message_handler(func=lambda message: message.text == 'Удалить пост')
 def handle_delete(message):
     chat_id = message.chat.id
-    msg = bot.send_message(chat_id, "Введите номер для удаления:")
+    msg = bot.send_message(chat_id, "Введите номер поста для удаления:")
     bot.register_next_step_handler(msg, process_delete_step)
 
 
@@ -128,7 +127,7 @@ def process_update_step(message, post):
             # Обновляем данные записи в базе данных
             post.username = data[0]
             post.text = data[1]
-            post.likes = int(data[2])  # Преобразуем строку в целое число
+            post.likes = data[2]
             post.save()
             bot.send_message(chat_id, "Пост обновлен")
         except Exception as e:
