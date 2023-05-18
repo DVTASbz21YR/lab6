@@ -23,22 +23,22 @@ db.create_tables([Post])
 
 
 # получаем доступ к боту
-bot = telebot.TeleBot('TGbot_token_here')
+bot = telebot.TeleBot('5872856683:AAE-gcdryoBHk0fONGyycZtC7jI-FrgjiGk')
 
 
 # Начало работы бота после отправки /start
 @bot.message_handler(commands=['start'])
 def handle_start(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-    button_1 = types.KeyboardButton('Новый пост')
-    button_2 = types.KeyboardButton('Лента')
-    button_3 = types.KeyboardButton('Удалить пост')
-    button_4 = types.KeyboardButton('Редактировать пост')
+    button_1 = types.KeyboardButton('➕ Новый пост')
+    button_2 = types.KeyboardButton('📱 Лента')
+    button_3 = types.KeyboardButton('❌ Удалить пост')
+    button_4 = types.KeyboardButton('✏ Редактировать пост')
     markup.add(button_1, button_2, button_3, button_4)
     bot.reply_to(message, "Это бот для работы с постами", reply_markup=markup)
 
 
-@bot.message_handler(func=lambda message: message.text == 'Новый пост')
+@bot.message_handler(func=lambda message: message.text == '➕ Новый пост')
 def handle_add(message):
     chat_id = message.chat.id
     msg = bot.send_message(chat_id, "Введите данные в формате: № поста, ник, текст, лайки")
@@ -59,7 +59,7 @@ def process_add_step(message):
         bot.send_message(chat_id, "Неверный формат данных")
 
 
-@bot.message_handler(func=lambda message: message.text == 'Лента')
+@bot.message_handler(func=lambda message: message.text == '📱 Лента')
 def handle_list(message):
     chat_id = message.chat.id
     rows = Post.select()
@@ -72,7 +72,7 @@ def handle_list(message):
         bot.send_message(chat_id, "Постов нет")
 
 
-@bot.message_handler(func=lambda message: message.text == 'Удалить пост')
+@bot.message_handler(func=lambda message: message.text == '❌ Удалить пост')
 def handle_delete(message):
     chat_id = message.chat.id
     msg = bot.send_message(chat_id, "Введите номер поста для удаления:")
@@ -93,7 +93,7 @@ def process_delete_step(message):
         bot.send_message(chat_id, f"Ошибка при удалении поста: {e}")
 
 
-@bot.message_handler(func=lambda message: message.text == 'Редактировать пост')
+@bot.message_handler(func=lambda message: message.text == '✏ Редактировать пост')
 def handle_edit(message):
     chat_id = message.chat.id
     msg = bot.send_message(chat_id, "Введите номер поста")
