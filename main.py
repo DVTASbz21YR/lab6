@@ -51,7 +51,7 @@ def process_add_step(message):
     data = message.text.split(', ')
     if len(data) == 4:
         try:
-            # Создаем запись в базе данных
+            # Новая запись в БД
             Post.create(post_id=int(data[0]), username=data[1], text=data[2], likes=data[3])
             bot.send_message(chat_id, "Данные успешно добавлены.")
         except Exception as e:
@@ -84,7 +84,7 @@ def process_delete_step(message):
     chat_id = message.chat.id
     number = message.text
     try:
-        # Проверяем наличие записи с указанным номером
+        # Есть ли пост с таким ID?
         post = Post.get(Post.post_id == number)
         post.delete_instance()
         bot.send_message(chat_id, "Пост удален")
@@ -105,7 +105,7 @@ def process_edit_step(message):
     chat_id = message.chat.id
     number = message.text
     try:
-        # Проверяем наличие записи с указанным номером
+        # Есть ли пост с таким ID?
         post = Post.get(Post.post_id == number)
         msg = bot.send_message(chat_id, "Выбрана запись:\n"
                                         f"№ поста: {post.post_id}\n"
@@ -137,5 +137,5 @@ def process_update_step(message, post):
         bot.send_message(chat_id, "Неверный формат данных")
 
 
-# Запускаем бота
+# Запуск
 bot.polling()
